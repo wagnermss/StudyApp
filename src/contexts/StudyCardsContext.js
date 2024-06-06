@@ -1,8 +1,9 @@
-import React, { createContext, useState, useEffect, Children }from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 const StudyCardsContext = createContext()
 
-export const StyCardsProvider = ({ children }) => {
+export const StudyCardsProvider = ({ children }) => {
     const [cards, setCards] = useState([])
 
     useEffect(() => {
@@ -10,12 +11,13 @@ export const StyCardsProvider = ({ children }) => {
     }, [])
 
     const loadCards = async () => {
+       
         const storedCards = await AsyncStorage.getItem('cards')
         if (storedCards) setCards(JSON.parse(storedCards))
     }
 
-    const addCard = async () => {
-        const newCards = [...cards, {...cards, id: Date.now() }]
+    const addCard = async (card) => {
+        const newCards = [...cards, { ...card, id: Date.now() }]
         setCards(newCards)
         await AsyncStorage.setItem('cards', JSON.stringify(newCards))
     }
